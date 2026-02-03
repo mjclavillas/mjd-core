@@ -4,18 +4,17 @@ namespace Mark\MjdCore\Http;
 use Twig\Loader\FilesystemLoader;
 use Twig\Environment;
 
-class View 
+class View
 {
     protected static $twig;
 
     public static function render(string $view, array $data = []) 
     {
         if (!self::$twig) {
-            // Point to your views folder
             $loader = new FilesystemLoader(__DIR__ . '/../../views');
             
             self::$twig = new Environment($loader, [
-                'cache' => false, 
+                'cache' => false,
                 'debug' => $_ENV['APP_DEBUG'] === 'true',
             ]);
         }

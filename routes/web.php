@@ -6,7 +6,7 @@ use App\Controllers\HomeController;
 $router = new Router();
 
 $router->get('/', function() {
-    echo "Welcome to MJD-Core Framework!";
+    echo "Hello world!";
 });
 
 $router->get('/', [HomeController::class, 'index']);
