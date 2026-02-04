@@ -38,7 +38,7 @@ The framework follows a strict **Request-Response** pipeline:
 ---
 
 ## 📂 Directory Structure
-```text
+```bash
 ├── app/                # Application Logic
 │   ├── Controllers/    # Request Handlers
 │   ├── Models/         # Database Entities
