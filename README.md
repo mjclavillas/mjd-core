@@ -60,21 +60,24 @@ The framework follows a strict **Request-Response** pipeline:
 git clone [https://github.com/your-username/mjd-core.git](https://github.com/your-username/mjd-core.git)
 cd mjd-core
 composer install
+```
 
 ### 2. Environment Setup
 ```bash
 cp .env.example .env
+```
 # Update DB_DATABASE and APP_URL in your .env file
 
 ### 3. Database & Scaffolding
 ```bash
 php mjdc migrate
 php mjdc db:seed
+```
 
 ### 4. Launch Server
 ```bash
 php mjdc serve
-
+```
 ---
 
 ## ⌨️ CLI Assistant (mjdc)
