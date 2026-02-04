@@ -50,6 +50,8 @@ The framework follows a strict **Request-Response** pipeline:
 ├── storage/            # Logs, Cache, and File Uploads
 └── views/              # Twig Templates
 
+---
+
 ## 🛠️ Installation
 
 ### 1. Clone & Install
@@ -71,6 +73,8 @@ php mjdc db:seed
 ### 4. Launch Server
 ```bash
 php mjdc serve
+
+---
 
 ## ⌨️ CLI Assistant (mjdc)
 
