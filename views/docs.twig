@@ -1,0 +1,308 @@
+{% extends "layout.twig" %}
+{% block scripts %}
+    <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+{% endblock %}
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 py-10" 
+     x-data="{
+        search: '',
+        activeSection: 'getting-started',
+        sections: [
+            { id: 'getting-started', title: 'Getting Started' },
+            { id: 'routing', title: 'Routing Engine' },
+            { id: 'middleware', title: 'Middleware Pipeline' },
+            { id: 'mjd-cli', title: 'CLI Assistant' },
+            { id: 'controllers', title: 'Controllers & DI' },
+            { id: 'models', title: 'Models & Persistence' },
+            { id: 'sessions', title: 'Session Management' },
+            { id: 'api-console', title: 'Interactive Console' }
+        ],
+        get filteredSections() {
+            return this.sections.filter(s => 
+                s.title.toLowerCase().includes(this.search.toLowerCase())
+            );
+        },
+        scrollTo(id) {
+            this.activeSection = id;
+            const el = document.getElementById(id);
+            if(el) {
+                window.scrollTo({
+                    top: el.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+            }
+        }
+     }">
+
+    <div class="flex flex-col md:flex-row gap-12">
+
+        <aside class="w-full md:w-64 flex-shrink-0">
+            <div class="sticky top-24 space-y-8">
+                <div class="relative">
+                    <input type="text" x-model="search" placeholder="Search_Manual..." 
+                        class="w-full bg-white/[0.03] border border-white/10 rounded-lg px-4 py-2 text-xs mono text-white focus:outline-none focus:border-indigo-500/50 transition-all">
+                </div>
+
+                <nav class="space-y-6">
+                    <h3 class="mono text-[10px] text-indigo-400 uppercase tracking-widest font-bold">Documentation</h3>
+                    <ul class="space-y-3">
+                        <template x-for="section in filteredSections" :key="section.id">
+                            <li>
+                                <a @click.prevent="scrollTo(section.id)" 
+                                   :class="activeSection === section.id ? 'text-white translate-x-2' : 'text-white/40'"
+                                   class="text-xs hover:text-white transition-all cursor-pointer flex items-center gap-2 group">
+                                    <span class="w-1.5 h-1.5 rounded-full transition-all bg-indigo-500"
+                                          :class="activeSection === section.id ? 'opacity-100 scale-125 shadow-[0_0_8px_indigo]' : 'opacity-0'"></span>
+                                    <span x-text="section.title"></span>
+                                </a>
+                            </li>
+                        </template>
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <article class="flex-grow max-w-3xl space-y-32 pb-64">
+
+            <section id="getting-started" class="scroll-mt-32">
+                <h1 class="text-6xl font-black italic text-white uppercase tracking-tighter mb-4">MJD_CORE</h1>
+                <p class="text-indigo-400 font-bold text-sm mono mb-8">// VERSION_1.0_STABLE</p>
+                <div class="space-y-4 text-indigo-100/60 leading-relaxed">
+                    <p>MJD-Core is a high-performance PHP framework built on the principles of <strong>Dependency Injection</strong> and <strong>Inversion of Control</strong>. Unlike traditional frameworks that rely on heavy configuration files, MJD-Core uses PHP Reflection to understand your code structure dynamically.</p>
+                    <p>This approach results in a significantly smaller footprint and near-instant routing resolution, making it ideal for both monolithic applications and high-traffic microservices.</p>
+                </div>
+            </section>
+
+            <section id="routing" class="scroll-mt-32">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="mono text-indigo-500 font-bold">[00]</span>
+                    <h2 class="text-2xl font-bold text-white tracking-tight uppercase">Routing_Engine</h2>
+                </div>
+                <div class="space-y-4 text-indigo-100/60 mb-6">
+                    <p>The Routing Engine matches incoming URI patterns to specific Controller actions. It supports <strong>Group Attributes</strong>, allowing you to apply prefixes or middleware to multiple routes simultaneously.</p>
+                </div>
+                <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-6 mono text-[12px]">
+                    <pre class="text-indigo-400">
+Router::group(['prefix' => '/api'], function($router) {
+    $router->get('/users', [UserController::class, 'index']);
+});</pre>
+                </div>
+            </section>
+
+            <section id="middleware" class="scroll-mt-32">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="mono text-indigo-500 font-bold">[01]</span>
+                    <h2 class="text-2xl font-bold text-white tracking-tight uppercase">Middleware_Pipeline</h2>
+                </div>
+                <div class="space-y-4 text-indigo-100/60 mb-6">
+                    <p>Middleware acts as a layer of security and transformation. Each request passes through a <strong>serial pipeline</strong> where classes can inspect the request, verify CSRF tokens, or check authentication before reaching the controller.</p>
+                </div>
+                <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-6 mono text-[12px]">
+                    <pre class="text-indigo-400">
+Router::get('/secret', [Controller::class, 'act'])->middleware(SecretMiddleware::class);
+                    </pre>
+                </div>
+            </section>
+
+            <section id="mjd-cli" class="scroll-mt-32">
+                <div class="flex items-center gap-4 mb-8">
+                    <span class="mono text-indigo-500 font-bold">[02]</span>
+                    <h2 class="text-2xl font-bold text-white tracking-tight uppercase">CLI_Assistant</h2>
+                </div>
+                <p class="text-indigo-100/60 mb-6">The `mjdc` binary is your development companion for scaffolding and database management.</p>
+                <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-xl overflow-hidden">
+                    <table class="w-full text-left mono text-[11px]">
+                        <thead class="bg-indigo-500/10 text-indigo-400 uppercase font-bold">
+                            <tr><th class="px-6 py-4">Command</th><th class="px-6 py-4">Detailed Description</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-indigo-500/10 text-indigo-100/50">
+                            <tr><td class="px-6 py-4">php mjdc serve [host] [port]</td><td class="px-6 py-4">Boots the PHP development server | Defaults localhost:8000.</td></tr>
+                            <tr><td class="px-6 py-4">php mjdc make:controller</td><td class="px-6 py-4">Creates a new controller class in app/Controllers.</td></tr>
+                            <tr><td class="px-6 py-4">php mjdc make:model</td><td class="px-6 py-4">Creates a new model with associated migration file.</td></tr>
+                            <tr><td class="px-6 py-4">php mjdc make:migration</td><td class="px-6 py-4">Generates a timestamped database schema file.</td></tr>
+                            <tr><td class="px-6 py-4">php mjdc migrate</td><td class="px-6 py-4">Executes all pending database migrations.</td></tr>
+                            <tr><td class="px-6 py-4">php mjdc db:fresh</td><td class="px-6 py-4">Drops all tables and re-runs all migrations from scratch.</td></tr>
+                            <tr><td class="px-6 py-4">php mjdc db:seed</td><td class="px-6 py-4">Populates the database with test data using Seeder classes.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="controllers" class="scroll-mt-32">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="mono text-indigo-500 font-bold">[03]</span>
+                    <h2 class="text-2xl font-bold text-white tracking-tight uppercase">Controllers_&_DI</h2>
+                </div>
+                <div class="space-y-4 text-indigo-100/60 mb-6">
+                    <p>MJD-Core features <strong>Auto-Wiring</strong>. When the Router invokes a controller method, it inspects the type-hints. If a method requires a `Request` or a service class, the DI container resolves and injects it automatically.</p>
+                </div>
+                <div class="bg-indigo-950/40 border border-indigo-500/30 rounded-xl p-6 mono text-[12px]">
+                    <pre class="text-indigo-400">
+public function sendResetLink(Request $request) {
+    // $request is automatically injected by the Router
+    $email = $request->input('email');
+}</pre>
+                </div>
+            </section>
+
+            <section id="models" class="scroll-mt-32">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="mono text-indigo-500 font-bold">[04]</span>
+                    <h2 class="text-2xl font-bold text-white tracking-tight uppercase">Models_&_Persistence</h2>
+                </div>
+                <div class="space-y-4 text-indigo-100/60 mb-6">
+                    <p>The ORM utilizes the <strong>Active Record</strong> pattern. Each model class represents a database table row, providing a fluent interface for querying and saving data without writing raw SQL.</p>
+                </div>
+                <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-6 mono text-[12px]">
+                    <pre class="text-indigo-400">
+$user = User::where('email', $email)->first();
+$user->last_login = now();
+$user->save();</pre>
+                </div>
+            </section>
+
+            <section id="sessions" class="scroll-mt-32">
+                <div class="flex items-center gap-4 mb-6">
+                    <span class="mono text-indigo-500 font-bold">[05]</span>
+                    <h2 class="text-2xl font-bold text-white tracking-tight uppercase">Session_Management</h2>
+                </div>
+                <div class="space-y-4 text-indigo-100/60 mb-6">
+                    <p>MJD-Core handles sessions via a secure wrapper. It supports <strong>Flash Data</strong>—session values that only persist for exactly one subsequent request, perfect for success messages.</p>
+                </div>
+                <div class="bg-indigo-950/20 border border-indigo-500/20 rounded-xl p-6 mono text-[12px]">
+                    <pre class="text-indigo-400">
+Session::set('user_id', $user->id);
+Session::flash('message', 'Logged in successfully!');</pre>
+                </div>
+            </section>
+
+            <section id="api-console" class="scroll-mt-32">
+    <div class="flex items-center gap-4 mb-8">
+        <span class="mono text-indigo-500 font-bold px-2 py-1 bg-indigo-500/10 rounded border border-indigo-500/20">[LIVE]</span>
+        <h2 class="text-2xl font-bold text-white tracking-tight uppercase">Interactive_Console</h2>
+    </div>
+
+    <div class="bg-[#0a0a0c] border border-white/5 rounded-2xl overflow-hidden shadow-2xl"
+         x-data="{
+            consoleMethod: 'GET',
+            consolePath: '/api/status',
+            consoleBody: '{\n&quot;key&quot;:&quot;value&quot;\n}',
+            consoleResponse: '// Terminal Ready...',
+            isLoading: false,
+            copyLabel: 'Copy_JSON',
+
+            formatJSON() {
+                try {
+                    const obj = JSON.parse(this.consoleBody);
+                    this.consoleBody = JSON.stringify(obj, null, 4);
+                } catch (e) {
+                    alert('Invalid JSON structure detected.');
+                }
+            },
+
+            async copyResponse() {
+                await navigator.clipboard.writeText(this.consoleResponse);
+                this.copyLabel = 'Copied!';
+                setTimeout(() => this.copyLabel = 'Copy_JSON', 2000);
+            },
+
+            async runTest() {
+                this.isLoading = true;
+                this.consoleResponse = '// Executing ' + this.consoleMethod + ' Request...';
+                
+                try {
+                    const options = {
+                        method: this.consoleMethod,
+                        headers: { 
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json' // [Inference] Tell PHP we want JSON
+                        }
+                    };
+
+                    if (['POST', 'PUT', 'PATCH'].includes(this.consoleMethod)) {
+                        options.body = this.consoleBody;
+                    }
+
+                    const res = await fetch(this.consolePath, options);
+                    const rawText = await res.text(); // [Inference] Get raw response first
+
+                    try {
+                        const data = JSON.parse(rawText);
+                        this.consoleResponse = JSON.stringify(data, null, 4);
+                    } catch (jsonError) {
+                        // This is where you see the ACTUAL PHP error
+                        this.consoleResponse = '// SERVER RETURNED HTML INSTEAD OF JSON:\n' + rawText;
+                    }
+                } catch (e) {
+                    this.consoleResponse = '// Network Error: ' + e.message;
+                } finally {
+                    this.isLoading = false;
+                }
+            }
+         }">
+        
+        <div class="p-8 space-y-8">
+            {# URL Bar #}
+            <div class="flex flex-col md:flex-row gap-3 p-2 bg-white/[0.02] border border-white/5 rounded-xl">
+                <select x-model="consoleMethod" 
+                        class="bg-zinc-900 border border-white/10 text-indigo-400 mono text-xs px-4 py-2.5 rounded-lg outline-none focus:border-indigo-500 transition-all cursor-pointer">
+                    <option>GET</option><option>POST</option><option>PUT</option><option>PATCH</option><option>DELETE</option>
+                </select>
+                
+                <div class="relative flex-grow">
+                    <input type="text" x-model="consolePath" 
+                           class="w-full bg-zinc-900 border border-white/10 text-emerald-400 mono text-xs px-4 py-2.5 rounded-lg outline-none focus:border-indigo-500 transition-all">
+                </div>
+
+                <button @click="runTest()" 
+                        :disabled="isLoading"
+                        class="bg-indigo-600 text-white text-[11px] font-black px-8 py-2.5 rounded-lg hover:bg-indigo-500 active:scale-95 disabled:opacity-50 transition-all uppercase italic">
+                    <span x-show="!isLoading">Execute_Request</span>
+                    <span x-show="isLoading" class="animate-pulse">Processing...</span>
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {# Input Area #}
+                <div class="space-y-3" x-show="['POST', 'PUT', 'PATCH'].includes(consoleMethod)" x-transition>
+                    <div class="flex justify-between items-center px-1">
+                        <label class="mono text-[10px] text-white/40 uppercase tracking-widest">Request_Payload</label>
+                        <button @click="formatJSON()" class="mono text-[9px] text-indigo-400 hover:text-white transition uppercase underline decoration-indigo-500/30 underline-offset-4">Format_JSON</button>
+                    </div>
+                    <textarea x-model="consoleBody" 
+                              spellcheck="false"
+                              class="w-full h-64 bg-zinc-900/50 border border-white/10 rounded-xl p-6 text-indigo-300 mono text-xs outline-none focus:border-indigo-500/50 transition-all resize-none"></textarea>
+                </div>
+
+                {# Output Area #}
+                <div class="space-y-3" :class="!['POST', 'PUT', 'PATCH'].includes(consoleMethod) ? 'col-span-2' : ''">
+                    <div class="flex justify-between items-center px-1">
+                        <label class="mono text-[10px] text-white/40 uppercase tracking-widest">Server_Response</label>
+                        <button @click="copyResponse()" x-text="copyLabel" class="mono text-[9px] text-white/30 hover:text-white transition uppercase"></button>
+                    </div>
+                    <div class="relative">
+                        <pre class="w-full h-64 bg-black border border-white/5 rounded-xl p-6 text-indigo-400 mono text-[11px] overflow-auto custom-scrollbar" 
+                             x-text="consoleResponse"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white/[0.02] border-t border-white/5 px-8 py-3 flex justify-between items-center">
+            <div class="flex gap-6 items-center">
+                <span class="mono text-[9px] text-white/20 uppercase tracking-widest">Buffer: Active</span>
+                <span class="mono text-[9px] text-white/20 uppercase tracking-widest">Charset: UTF-8</span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="mono text-[9px] text-indigo-500/50 uppercase">Session_Live</span>
+                <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-ping"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        </article>
+    </div>
+</div>
+{% endblock %}

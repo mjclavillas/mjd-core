@@ -1,12 +1,21 @@
 <?php
+use Mark\MjdCore\Http\Session;
+use Mark\MjdCore\Http\Router;
+use Mark\MjdCore\Http\View;
+
+define('APP_START', microtime(true));
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../');
-$dotenv->load();
+Session::start();
 
-if (isset($_ENV['APP_DEBUG']) && $_ENV['APP_DEBUG'] === 'true') {
-    //
-}
+$container = require_once __DIR__ . '/../bootstrap/app.php';
+
+$router = $container->make(Router::class);
 
 require_once __DIR__ . '/../routes/web.php';
+require_once __DIR__ . '/../routes/api.php';
+
+$router->run();
+
+Session::unflash();

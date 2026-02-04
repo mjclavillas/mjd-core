@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Server Error</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+        .pulse-animation { animation: pulse-slow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
+    </style>
+</head>
+<body class="h-full bg-slate-50 flex items-center justify-center p-6">
+
+    <div class="max-w-md w-full text-center">
+        <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-red-100 text-red-600 mb-8 pulse-animation">
+            <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            </svg>
+        </div>
+
+        <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-4">System Hiccup</h1>
+        
+        <div class="bg-white border border-red-100 rounded-2xl p-6 shadow-sm mb-8">
+            <p class="text-slate-600 leading-relaxed mb-4">
+                {{ message|default("Something went wrong on our end. Our servers are acting a bit moody, but we're looking into it.") }}
+            </p>
+            
+            {% if env == 'development' and exception %}
+                <div class="text-left bg-slate-900 rounded-lg p-4 overflow-x-auto">
+                    <p class="text-pink-400 font-mono text-xs mb-2">Debug Info:</p>
+                    <code class="text-slate-300 text-xs leading-5">
+                        {{ exception.getMessage() }}<br>
+                        in {{ exception.getFile() }} on line {{ exception.getLine() }}
+                    </code>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="flex flex-col sm:flex-row gap-3 justify-center">
+            <button onclick="window.location.reload()" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-slate-900 hover:bg-slate-800 shadow-sm transition duration-150">
+                Try Again
+            </button>
+            <a href="/" class="inline-flex items-center justify-center px-6 py-3 border border-slate-200 text-base font-medium rounded-xl text-slate-600 bg-white hover:bg-slate-50 transition duration-150">
+                Return Home
+            </a>
+        </div>
+
+        <p class="mt-12 text-xs text-slate-400 font-medium uppercase tracking-widest">
+            Error Code: 500 &bull; MJD-Core Engine
+        </p>
+    </div>
+
+</body>
+</html>

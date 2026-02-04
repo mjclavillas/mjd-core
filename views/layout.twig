@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title|default('MJD-Core') }}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    {% block scripts %}{% endblock %}
+    <style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .mono { font-family: 'JetBrains Mono', monospace; }
+
+        .nav-link-active {
+            color: #818cf8;
+            text-shadow: 0 0 15px rgba(129, 140, 248, 0.4);
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3f3f46; }
+    </style>
+</head>
+<body class="h-full bg-[#09090b] text-[#fafafa] flex flex-col">
+
+    <nav class="sticky top-0 z-50 bg-[#09090b]/80 backdrop-blur-md border-b border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center gap-8">
+                    <a href="/" class="flex items-center gap-2 group">
+                        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center font-black italic group-hover:bg-indigo-500 transition-colors">M</div>
+                        <span class="mono text-sm font-bold tracking-tighter uppercase">MJD_CORE<span class="text-indigo-500">.v1</span></span>
+                    </a>
+
+                    <div class="hidden md:flex items-center gap-6">
+                        <a href="/docs" class="mono text-[11px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Documentation</a>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    {% if auth_check() %}
+                        <span class="mono text-[10px] text-white/30 uppercase">User: {{ session.username }}</span>
+                        <a href="/logout" class="px-3 py-1.5 border border-white/10 rounded-md mono text-[10px] uppercase hover:bg-white/5 transition">Logout</a>
+                    {% else %}
+                        <a href="/login" class="mono text-[11px] uppercase tracking-widest text-white/50 hover:text-white transition-colors">Login</a>
+                        <a href="/register" class="px-4 py-2 bg-white text-black rounded-lg text-xs font-bold uppercase tracking-tight hover:bg-zinc-200 transition">Get Started</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-4">
+            {% if flash.success %}
+                <div class="bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 px-4 py-3 rounded-xl mono text-xs mb-6">
+                    [SYSTEM_OK]: {{ flash.success }}
+                </div>
+            {% endif %}
+            {% if flash.error %}
+                <div class="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl mono text-xs mb-6">
+                    [SYSTEM_ERR]: {{ flash.error }}
+                </div>
+            {% endif %}
+        </div>
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="border-t border-white/5 bg-[#09090b] py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="mono text-[10px] text-white/20 uppercase tracking-[0.2em]">
+                &copy; {{ "now"|date("Y") }} MJD-Core Framework // Compiled in {{ execution_time }}
+            </div>
+            <div class="flex gap-8">
+                <a href="#" class="mono text-[10px] text-white/20 hover:text-indigo-400 uppercase">Github</a>
+                <a href="#" class="mono text-[10px] text-white/20 hover:text-indigo-400 uppercase">Status</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

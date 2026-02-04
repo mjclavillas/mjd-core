@@ -1,17 +1,36 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ title }}</title>
-</head>
-<body>
-    <h1>Welcome to {{ appName }}</h1>
-    
-    {% if username %}
-        <p>Hello, {{ username }}!</p>
-    {% else %}
-        <p>Hello, Guest!</p>
-    {% endif %}
+{% extends "layout.twig" %}
 
-    <small>Current Environment: {{ env }}</small>
-</body>
-</html>
+{% block content %}
+<div class="relative flex flex-col items-center justify-center min-h-[70vh] px-6 text-center">
+    <div class="absolute inset-0 flex items-center justify-center opacity-[0.02] pointer-events-none select-none">
+        <h1 class="text-[20vw] font-black italic">MJD_CORE</h1>
+    </div>
+
+    <div class="relative z-10 space-y-6 max-w-2xl">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20">
+            <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
+            </span>
+            <span class="mono text-[10px] uppercase tracking-widest text-indigo-400 font-bold">Engine_Status: Stable</span>
+        </div>
+
+        <h1 class="text-6xl md:text-7xl font-black tracking-tighter text-white uppercase italic leading-none">
+            Build. Scale. <br/><span class="text-indigo-500 underline decoration-white/10">Automate.</span>
+        </h1>
+
+        <p class="text-zinc-400 text-lg max-w-md mx-auto leading-relaxed">
+            The lightweight PHP framework designed for high-performance applications and clean architecture.
+        </p>
+
+        <div class="flex items-center justify-center gap-4 pt-6">
+            <a href="/register" class="px-8 py-4 bg-white text-black font-bold rounded-xl hover:bg-zinc-200 transition-all active:scale-95 uppercase text-xs tracking-widest">
+                Get_Started
+            </a>
+            <a href="/docs" class="mono px-8 py-4 border border-white/10 rounded-xl text-white/50 hover:text-white hover:bg-white/5 transition-all text-xs tracking-widest">
+                View_Docs
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

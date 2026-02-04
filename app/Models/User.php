@@ -7,8 +7,23 @@ class User extends Model
 {
     protected $table = 'users';
 
-    public function getActiveUsers()
+    protected function create(array $data)
     {
-        return $this->db->query("SELECT * FROM users WHERE status = 'active'")->fetchAll();
+        $data['password'] = password_hash($data['password'], PASSWORD_BCRYPT);
+
+        $this->attributes = $data;
+        $this->save();
+
+        return $this;
+    }
+
+    protected function verify($email, $password)
+    {
+        $user = $this->query()->where('email', $email)->first();
+
+        if ($user && password_verify($password, $user->attributes['password'])) {
+            return $user;
+        }
+        return false;
     }
 }

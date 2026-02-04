@@ -7,4 +7,20 @@ abstract class Controller
     {
         echo View::render($name, $data);
     }
+
+    protected function json(array $data, int $status = 200)
+    {
+        header('Content-Type: application/json');
+        http_response_code($status);
+        echo json_encode($data);
+        exit;
+    }
+
+    protected function redirect($url) {
+        if (session_status() === PHP_SESSION_ACTIVE) {
+            session_write_close();
+        }
+        header("Location: {$url}");
+        return "";
+    }
 }

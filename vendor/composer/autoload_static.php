@@ -65,6 +65,7 @@ class ComposerStaticInit73526c6125a8469fb1764a4b144a4dee
             'Psr\\Clock\\' => 10,
             'PhpParser\\' => 10,
             'PhpOption\\' => 10,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' =>
         array (
@@ -85,11 +86,16 @@ class ComposerStaticInit73526c6125a8469fb1764a4b144a4dee
         array (
             'GrahamCampbell\\ResultType\\' => 26,
         ),
+        'F' =>
+        array (
+            'Faker\\' => 6,
+        ),
         'D' =>
         array (
             'Dotenv\\' => 7,
             'Doctrine\\Inflector\\' => 19,
             'DeepCopy\\' => 9,
+            'Database\\' => 9,
         ),
         'C' =>
         array (
@@ -99,6 +105,10 @@ class ComposerStaticInit73526c6125a8469fb1764a4b144a4dee
         'B' =>
         array (
             'Brick\\Math\\' => 11,
+        ),
+        'A' =>
+        array (
+            'App\\' => 4,
         ),
     );
 
@@ -183,6 +193,10 @@ class ComposerStaticInit73526c6125a8469fb1764a4b144a4dee
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
         ),
+        'PHPMailer\\PHPMailer\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
         'Mark\\MjdCore\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
@@ -215,6 +229,10 @@ class ComposerStaticInit73526c6125a8469fb1764a4b144a4dee
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
         ),
+        'Faker\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/fzaninotto/faker/src/Faker',
+        ),
         'Dotenv\\' =>
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
@@ -227,6 +245,10 @@ class ComposerStaticInit73526c6125a8469fb1764a4b144a4dee
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
+        'Database\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/database',
+        ),
         'Carbon\\Doctrine\\' =>
         array (
             0 => __DIR__ . '/..' . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine',
@@ -238,6 +260,10 @@ class ComposerStaticInit73526c6125a8469fb1764a4b144a4dee
         'Brick\\Math\\' =>
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
+        ),
+        'App\\' =>
+        array (
+            0 => __DIR__ . '/../..' . '/app',
         ),
     );
 

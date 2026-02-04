@@ -1,33 +1,23 @@
 <?php
+
 namespace App\Controllers;
 
 use Mark\MjdCore\Http\Controller;
 use App\Models\User;
+use Mark\MjdCore\Http\Session;
+use Mark\MjdCore\Http\View;
 
 class HomeController extends Controller
 {
-    public function welcome()
-    {
-        return "HomeController index";
-    }
-
     public function index()
     {
-        return $this->view('home', [
-            'title' => 'Home Page',
-            'appName' => $_ENV['APP_NAME'],
-            'username' => 'Mark'
-        ]);
+        return $this->view('home');
     }
 
-    public function users()
+    public function documentation()
     {
-        $userModel = new User();
-        $allUsers = $userModel->all();
-
-        return $this->view('users', [
-            'title' => 'User List',
-            'users' => $allUsers
+        return $this->view('docs', [
+            'title' => 'MJD-Core Documentation'
         ]);
     }
 }

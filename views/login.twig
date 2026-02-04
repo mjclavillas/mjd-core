@@ -1,0 +1,40 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[60vh] px-6 py-12">
+    <div class="w-full max-w-md">
+        <div class="mb-8 text-center">
+            <h2 class="text-2xl font-black text-white uppercase italic tracking-tight">Access_Portal</h2>
+            <p class="mono text-[10px] text-white/30 uppercase tracking-widest mt-1 font-bold">Security_Protocol_v1.0</p>
+        </div>
+
+        <div class="bg-zinc-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-xl shadow-2xl">
+            <form action="/auth/login" method="POST" class="space-y-6">
+                <div>
+                    <label class="mono text-[10px] text-white/40 uppercase tracking-widest mb-2 block">Identity_Email</label>
+                    <input type="email" name="email" required placeholder="name@domain.com"
+                        class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500/50 transition-colors mono">
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <label class="mono text-[10px] text-white/40 uppercase tracking-widest">Access_Key</label>
+                        <a href="/forgot-password" class="mono text-[9px] text-indigo-400/60 hover:text-indigo-400 uppercase tracking-tighter transition">Forgot_Key?</a>
+                    </div>
+                    <input type="password" name="password" required placeholder="••••••••"
+                        class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500/50 transition-colors mono">
+                </div>
+
+                <button type="submit" 
+                    class="w-full py-4 bg-indigo-600 text-white rounded-xl font-bold uppercase text-[11px] tracking-[0.2em] hover:bg-indigo-500 transition-all active:scale-[0.98] shadow-[0_0_20px_rgba(79,70,229,0.2)]">
+                    Authorize_Session
+                </button>
+            </form>
+        </div>
+        
+        <p class="mt-8 text-center mono text-[10px] text-white/20 uppercase tracking-widest">
+            No identity? <a href="/register" class="text-white hover:text-indigo-400 transition">Create_Account</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

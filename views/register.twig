@@ -1,0 +1,43 @@
+{% extends "layout.twig" %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-[60vh] px-6 py-12">
+    <div class="w-full max-w-md">
+        <div class="mb-8 text-center">
+            <h2 class="text-2xl font-black text-white uppercase italic tracking-tight">New_Registration</h2>
+            <p class="mono text-[10px] text-white/30 uppercase tracking-widest mt-1 font-bold">Create_Unique_Identifier</p>
+        </div>
+
+        <div class="bg-zinc-900/50 border border-white/5 rounded-2xl p-8 backdrop-blur-xl shadow-2xl">
+            <form action="/auth/register" method="POST" class="space-y-5">
+                <div>
+                    <label class="mono text-[10px] text-white/40 uppercase tracking-widest mb-2 block">Username</label>
+                    <input type="text" name="username" required 
+                        class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500/50 transition-colors mono">
+                </div>
+
+                <div>
+                    <label class="mono text-[10px] text-white/40 uppercase tracking-widest mb-2 block">Email_Address</label>
+                    <input type="email" name="email" required 
+                        class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500/50 transition-colors mono">
+                </div>
+
+                <div>
+                    <label class="mono text-[10px] text-white/40 uppercase tracking-widest mb-2 block">Password</label>
+                    <input type="password" name="password" required 
+                        class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-indigo-500/50 transition-colors mono">
+                </div>
+
+                <button type="submit" 
+                    class="w-full py-4 bg-white text-black rounded-xl font-bold uppercase text-[11px] tracking-[0.2em] hover:bg-zinc-200 transition-all active:scale-[0.98]">
+                    Initialize_Identity
+                </button>
+            </form>
+        </div>
+
+        <p class="mt-8 text-center mono text-[10px] text-white/20 uppercase tracking-widest">
+            Existing user? <a href="/login" class="text-white hover:text-indigo-400 transition">Return_To_Portal</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

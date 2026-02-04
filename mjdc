@@ -1,0 +1,170 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/vendor/autoload.php';
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$command = $argv[1] ?? 'help';
+
+switch ($command) {
+    /**
+     * SERVER COMMANDS
+     */
+    case 'serve':
+        $port = $argv[2] ?? '127.0.0.1';
+        $port = $argv[3] ?? '8000';
+        echo "\033[1;34m[SYSTEM]\033[0m MJD-Core Engine starting on http://{$host}:{$port}\n";
+        passthru("php -S {$host}:{$port} -t public");
+        break;
+
+    /**
+     * GENERATOR COMMANDS
+     */
+    case 'make:controller':
+        $name = $argv[2] ?? die("Error: Name required.\n");
+        if (!str_ends_with($name, 'Controller')) $name .= 'Controller';
+        $path = __DIR__ . "/app/Controllers/{$name}.php";
+        $template = "<?php\n\nnamespace App\\Controllers;\n\nuse Mark\\MjdCore\\Http\\Controller;\n\nclass {$name} extends Controller\n{\n    public function index()\n    {\n        return \$this->view('welcome');\n    }\n}\n";
+        file_put_contents($path, $template);
+        echo "\033[0;32m[CREATED]\033[0m Controller at $path\n";
+        break;
+
+    case 'make:model':
+        $name = $argv[2] ?? die("Error: Name required.\n");
+        $table = strtolower($name) . 's';
+        $path = __DIR__ . "/app/Models/{$name}.php";
+        $template = "<?php\n\nnamespace App\\Models;\n\nuse Mark\\MjdCore\\Database\\Model;\n\nclass {$name} extends Model\n{\n    protected \$table = '{$table}';\n}\n";
+        file_put_contents($path, $template);
+        echo "\033[0;32m[CREATED]\033[0m Model at $path\n";
+        break;
+
+    case 'make:middleware':
+        $name = $argv[2] ?? die("Error: Name required.\n");
+        if (!str_ends_with($name, 'Middleware')) $name .= 'Middleware';
+        $path = __DIR__ . "/app/Middleware/{$name}.php";
+        $template = "<?php\n\nnamespace App\\Middleware;\n\nuse Mark\\MjdCore\\Http\\Middleware;\n\nclass {$name} extends Middleware\n{\n    public function handle(callable \$next)\n    {\n        return \$next();\n    }\n}\n";
+        file_put_contents($path, $template);
+        echo "\033[0;32m[CREATED]\033[0m Middleware at $path\n";
+        break;
+
+    /**
+     * DATABASE COMMANDS
+     */
+    case 'make:migration':
+        $name = $argv[2] ?? die("Error: Migration name required (e.g., create_users_table).\n");
+        $className = str_replace(' ', '', ucwords(str_replace(['_', '-'], ' ', $name)));
+        $tableName = str_replace(['create_', '_table'], '', strtolower($name));
+
+        $file = date('Y_m_d_His') . "_{$name}.php";
+        $path = __DIR__ . "/database/migrations/{$file}";
+
+        $template = "<?php\n\n" .
+                    "use Mark\MjdCore\Database\Migration;\n\n" .
+                    "class {$className} extends Migration\n" .
+                    "{\n" .
+                    "    public function up()\n" .
+                    "    {\n" .
+                    "        \$this->execute(\"\n" .
+                    "            CREATE TABLE IF NOT EXISTS {$tableName} (\n" .
+                    "                id INT AUTO_INCREMENT PRIMARY KEY,\n" .
+                    "                -- add columns here\n" .
+                    "                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n" .
+                    "                updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP\n" .
+                    "            ) ENGINE=InnoDB;\n" .
+                    "        \");\n" .
+                    "    }\n\n" .
+                    "    public function down()\n" .
+                    "    {\n" .
+                    "        \$this->execute(\"DROP TABLE IF EXISTS {$tableName};\");\n" .
+                    "    }\n" .
+                    "}";
+
+        if (!is_dir(dirname($path))) mkdir(dirname($path), 0755, true);
+        file_put_contents($path, $template);
+        echo "\033[0;32m[CREATED]\033[0m Migration: $file\n";
+        break;
+
+    case 'migrate':
+        $db = \Mark\MjdCore\Database\DB::getInstance();
+        $db->exec("CREATE TABLE IF NOT EXISTS migrations (id INT AUTO_INCREMENT PRIMARY KEY, migration VARCHAR(255))");
+        
+        $migrationDir = __DIR__ . "/database/migrations";
+        if (!is_dir($migrationDir)) mkdir($migrationDir, 0755, true);
+        
+        $files = array_diff(scandir($migrationDir), ['.', '..']);
+        sort($files);
+
+        $ran = $db->query("SELECT migration FROM migrations")->fetchAll(PDO::FETCH_COLUMN);
+        
+        foreach ($files as $file) {
+            if (in_array($file, $ran)) continue;
+
+            require_once $migrationDir . "/" . $file;
+
+            $pureName = substr(pathinfo($file, PATHINFO_FILENAME), 18);
+            $className = str_replace(' ', '', ucwords(str_replace(['_', '-'], ' ', $pureName)));
+
+            if (class_exists($className)) {
+                $m = new $className($db);
+                $m->up();
+                
+                $db->prepare("INSERT INTO migrations (migration) VALUES (?)")->execute([$file]);
+                echo "\033[0;32m[MIGRATED]\033[0m $file\n";
+            }
+        }
+        break;
+
+    case 'db:fresh':
+        echo "\033[1;31m[WARNING]\033[0m Wipe database and re-migrate? (y/n): ";
+        if (trim(strtolower(fgets(fopen("php://stdin", "r")))) !== 'y') die("Aborted.\n");
+        
+        $db = \Mark\MjdCore\Database\DB::getInstance();
+        $dbName = $_ENV['DB_DATABASE'];
+        
+        $db->exec("DROP DATABASE IF EXISTS `$dbName` ");
+        $db->exec("CREATE DATABASE `$dbName` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+        $db->exec("USE `$dbName` ");
+        
+        echo "\033[1;34m[SYSTEM]\033[0m Database wiped. Re-running migrations...\n";
+        
+        passthru("php mjdc migrate");
+        break;
+
+    case 'make:seeder':
+        $name = $argv[2] ?? die("Error: Name required.\n");
+        if (!str_ends_with($name, 'Seeder')) $name .= 'Seeder';
+        $path = __DIR__ . "/database/seeders/{$name}.php";
+        $template = "<?php\n\nnamespace Database\\Seeders;\n\nclass {$name}\n{\n    public function run()\n    {\n        \$db = \\Mark\\MjdCore\\Database\\DB::getInstance();\n    }\n}\n";
+        file_put_contents($path, $template);
+        echo "\033[0;32m[CREATED]\033[0m Seeder at $path\n";
+        break;
+
+    case 'db:seed':
+        $name = $argv[2] ?? die("Error: Seeder class required.\n");
+        $fullClass = "Database\\Seeders\\$name";
+        $p = __DIR__ . "/database/seeders/{$name}.php";
+        if (file_exists($p)) {
+            require_once $p;
+            (new $fullClass)->run();
+            echo "\033[0;32m[SUCCESS]\033[0m Database seeded with $name\n";
+        } else {
+            echo "\033[1;31m[ERROR]\033[0m Seeder file not found: $p\n";
+        }
+        break;
+
+    default:
+        echo "\033[1;34mMJD-Core CLI Assistant\033[0m\n";
+        echo "-----------------------\n";
+        echo "serve [host] [port]        | Run development server\n";
+        echo "make:controller [N] | Create a new Controller\n";
+        echo "make:model [N]      | Create a new Model\n";
+        echo "make:middleware [N] | Create a new Middleware\n";
+        echo "make:migration [N]  | Create a new Migration\n";
+        echo "make:seeder [N]     | Create a new Seeder\n";
+        echo "migrate             | Run all pending migrations\n";
+        echo "db:fresh            | Wipe and re-run all migrations\n";
+        echo "db:seed [Class]     | Run a specific seeder class\n";
+        break;
+}
