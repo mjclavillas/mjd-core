@@ -57,7 +57,7 @@ The framework follows a strict **Request-Response** pipeline:
 
 ### 1. Clone & Install
 ```bash
-git clone [https://github.com/your-username/mjd-core.git](https://github.com/your-username/mjd-core.git)
+git clone [https://github.com/mjclavillas/mjd-core.git](https://github.com/mjclavillas/mjd-core.git)
 cd mjd-core
 composer install
 ```
