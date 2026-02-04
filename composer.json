@@ -1,6 +1,6 @@
 {
     "name": "mark/mjd-core",
-    "description": "A simple php framework",
+    "description": "A minimalist, industrial-grade PHP framework designed for developers who value transparency, speed, and clean code",
     "type": "project",
     "require": {
         "vlucas/phpdotenv": "^5.6",
