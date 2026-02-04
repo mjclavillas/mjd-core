@@ -38,7 +38,7 @@ The framework follows a strict **Request-Response** pipeline:
 ---
 
 ## 📂 Directory Structure
-```bash
+```text
 ├── app/                # Application Logic
 │   ├── Controllers/    # Request Handlers
 │   ├── Models/         # Database Entities
@@ -49,6 +49,7 @@ The framework follows a strict **Request-Response** pipeline:
 ├── src/                # MJD-Core Engine (Framework Source)
 ├── storage/            # Logs, Cache, and File Uploads
 └── views/              # Twig Templates
+```
 
 ---
 
